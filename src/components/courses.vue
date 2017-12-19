@@ -23,28 +23,28 @@
                 </div>
             </header>
             <ul>
-                <li data-click="gotoDetail(course.id)" class="course" data-for="let course of courses">
-                    <img class="cover" src="{ {course.cover}}" alt="">
+                <li @click="gotoDetail(course.id)" class="course" v-for="course in courses">
+                    <img class="cover" :src="course.cover" alt="">
                     <div class="info">
                         <div class="name">
-                            { {course.name}}
+                            {{course.name}}
                         </div>
                         <div class="time">
                             <label for="">时间：</label>
-                            { {course.startDate | date:'yyyy/MM/dd'}}-{ {course.endDate | date:'yyyy/MM/dd'}}
+                            {{course.startDate | datetime('YYYY/MM/DD')}}-{{course.endDate | datetime('YYYY/MM/DD')}}
                         </div>
                         <div class="address">
                             <label for="">地点：</label>
-                            { {course.address}}
+                            {{course.address}}
                         </div>
                         <div class="quota">
                             <label for="">人数：</label>
-                            限{ {course.quota}}人
+                            限{{course.quota}}人
                         </div>
                         <div class="period">
-                            <img data-if="course.period === 0" src="../assets/img/period_enrolling.png" alt="">
-                            <img data-if="course.period === 1" src="../assets/img/period_ongoing.png" alt="">
-                            <img data-if="course.period === 2" src="../assets/img/period_enrolling.png" alt="">
+                            <img v-if="course.period === 0" src="../assets/img/period_enrolling.png" alt="">
+                            <img v-else-if="course.period === 1" src="../assets/img/period_ongoing.png" alt="">
+                            <img v-else-if="course.period === 2" src="../assets/img/period_enrolling.png" alt="">
                         </div>
                     </div>
                 </li>
@@ -67,9 +67,13 @@
   export default {
     name: 'courses',
     data () {
-      return {busy: false}
+      return {
+        busy: false,
+        courses: []
+      }
     },
     methods: {
+
       loadMore: function () {
         var self = this
         self.busy = true
@@ -83,97 +87,97 @@
         }, 1000)
       },
       getCourses () {
+        let me = this
         axios.get('/courses')
             .then(function (response) {
               console.log(response)
+              me.courses = response.data.data.courses
             })
             .catch(function (error) {
               console.log(error)
             })
       }
+    },
+    created: function () {
+      this.getCourses()
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="less" scoped>
 
     main {
         height: 1000rem;
     }
 
-    main .banner {
+    .banner {
         display: block;
         width: 100%;
     }
 
-    main .tabs {
+    .tabs {
         padding-left: 21px;
         border-bottom: 1px solid #E5E5E5;
         line-height: 40px;
         overflow: auto;
+        .tabs-list {
+            white-space: nowrap;
+            a {
+                margin-right: 30px;
+                font-size: 14px;
+                color: #9B9B9B;
+                text-decoration: none;
+                &.on {
+                    color: #000;
+                }
+            }
+        }
     }
 
-    main .tabs .tabs-list {
-        white-space: nowrap;
-    }
-
-    main .tabs .tabs-list a {
-        margin-right: 30px;
-        font-size: 14px;
-        color: #9B9B9B;
-    }
-
-    main .tabs .tabs-list a.on {
-        color: #000;
-    }
-
-    main .courses ul .course {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    main .courses ul .course .cover {
-        width: 87px;
-        height: 130px;
-        margin: 15px 6px 5px 15px;
-    }
-
-    main .courses ul .course .info {
-        width: 248px;
-        margin: 15px 0 13px 6px;
-        font-size: 13px;
-        color: #9B9B9B;
-        line-height: 1;
-    }
-
-    main .courses ul .course .name {
-        font-size: 18px;
-        color: #2A2A2A;
-        line-height: 25px;
-    }
-
-    main .courses ul .course .time {
-        margin-top: 10px;
-    }
-
-    main .courses ul .course .address {
-        margin-top: 12px;
-    }
-
-    main .courses ul .course .quota {
-        margin-top: 12px;
-    }
-
-    main .courses ul .course .period {
-        position: absolute;
-        right: 0;
-        bottom: 13px;
-        margin-top: 12px;
-    }
-
-    main .courses ul .course .period img {
-        width: 44px;
+    .courses ul {
+        margin: 0;
+        padding-left: 0;
+        .course {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            .cover {
+                width: 87px;
+                height: 130px;
+                margin: 15px 6px 5px 15px;
+            }
+            .info {
+                width: 248px;
+                margin: 15px 0 13px 6px;
+                font-size: 13px;
+                color: #9B9B9B;
+                line-height: 1;
+                .name {
+                    margin-right: 21px;
+                    font-size: 18px;
+                    color: #2A2A2A;
+                    line-height: 25px;
+                }
+                .time {
+                    margin-top: 10px;
+                }
+                .address {
+                    margin-top: 12px;
+                }
+                .quota {
+                    margin-top: 12px;
+                }
+                .period {
+                    position: absolute;
+                    right: 0;
+                    bottom: 13px;
+                    margin-top: 12px;
+                    img {
+                        width: 44px;
+                    }
+                }
+            }
+        }
     }
 </style>

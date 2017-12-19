@@ -4,7 +4,15 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import infiniteScroll from 'vue-infinite-scroll'
+import moment from 'moment/moment'
+import 'normalize.css'
+
 Vue.use(infiniteScroll)
+Vue.filter('datetime', function (value, formatString) {
+  formatString = formatString || 'YYYY-MM-DD HH:mm:ss'
+  // return moment(value).format(formatString) // value可以是普通日期 20170723
+  return moment.unix(value / 1000).format(formatString) // 这是时间戳转时间
+})
 
 Vue.config.productionTip = false
 
