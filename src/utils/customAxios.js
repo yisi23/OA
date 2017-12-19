@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default axios.create({
-  baseURL: '/api',
-  timeout: 1000,
+  baseURL: process.env.API_ROOT,
+  timeout: 10000,
   headers: {'X-Custom-Header': 'foobar'}
 })
