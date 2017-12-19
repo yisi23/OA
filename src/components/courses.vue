@@ -1,13 +1,69 @@
 <template>
-    <div class="app"
-         style="height: 1200px;background-color: #ccc;width: 400px;margin: 0 auto;"
-         v-infinite-scroll="loadMore"
-         infinite-scroll-disabled="busy"
-         infinite-scroll-distance="10">
-    </div>
+    <main>
+        <img @click="getCourses" class="banner" src="../assets/img/banner.png" alt="">
+        <section class="courses">
+            <header class="tabs">
+                <div class="tabs-list">
+                    <a class="on" href="events/week-music">
+                        <span>全部</span>
+                    </a>
+                    <a href="events/week-1001" data-i="0">
+                        <span>报名中</span>
+                    </a>
+                    <a href="events/week-1002" data-i="1">
+                        <span>哲学</span>
+                    </a>
+                    <a href="events/week-1003" data-i="2">
+                        <span>艺术</span>
+                    </a>
+                    <a href="events/week-1004" data-i="3">
+                        <span>历史</span>
+                    </a>
+                    <a href="events/week-music">其他</a>
+                </div>
+            </header>
+            <ul>
+                <li data-click="gotoDetail(course.id)" class="course" data-for="let course of courses">
+                    <img class="cover" src="{ {course.cover}}" alt="">
+                    <div class="info">
+                        <div class="name">
+                            { {course.name}}
+                        </div>
+                        <div class="time">
+                            <label for="">时间：</label>
+                            { {course.startDate | date:'yyyy/MM/dd'}}-{ {course.endDate | date:'yyyy/MM/dd'}}
+                        </div>
+                        <div class="address">
+                            <label for="">地点：</label>
+                            { {course.address}}
+                        </div>
+                        <div class="quota">
+                            <label for="">人数：</label>
+                            限{ {course.quota}}人
+                        </div>
+                        <div class="period">
+                            <img data-if="course.period === 0" src="../assets/img/period_enrolling.png" alt="">
+                            <img data-if="course.period === 1" src="../assets/img/period_ongoing.png" alt="">
+                            <img data-if="course.period === 2" src="../assets/img/period_enrolling.png" alt="">
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </section>
+        <div class="app"
+             style="height: 1200px;background-color: #ccc;width: 400px;margin: 0 auto;"
+             v-infinite-scroll="loadMore"
+             infinite-scroll-disabled="busy"
+             infinite-scroll-distance="10">
+        </div>
+    </main>
+
 </template>
 
 <script>
+  import axios from '../utils/customAxios'
+
   export default {
     name: 'courses',
     data () {
@@ -25,6 +81,15 @@
           console.log('end... ' + new Date())
           self.busy = false
         }, 1000)
+      },
+      getCourses () {
+        axios.get('/courses')
+            .then(function (response) {
+              console.log(response)
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
       }
     }
   }
@@ -32,18 +97,83 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    h1, h2 {
-        font-weight: normal;
+
+    main {
+        height: 1000rem;
     }
-    ul {
-        list-style-type: none;
-        padding: 0;
+
+    main .banner {
+        display: block;
+        width: 100%;
     }
-    li {
-        display: inline-block;
-        margin: 0 10px;
+
+    main .tabs {
+        padding-left: 21px;
+        border-bottom: 1px solid #E5E5E5;
+        line-height: 40px;
+        overflow: auto;
     }
-    a {
-        color: #42b983;
+
+    main .tabs .tabs-list {
+        white-space: nowrap;
+    }
+
+    main .tabs .tabs-list a {
+        margin-right: 30px;
+        font-size: 14px;
+        color: #9B9B9B;
+    }
+
+    main .tabs .tabs-list a.on {
+        color: #000;
+    }
+
+    main .courses ul .course {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    main .courses ul .course .cover {
+        width: 87px;
+        height: 130px;
+        margin: 15px 6px 5px 15px;
+    }
+
+    main .courses ul .course .info {
+        width: 248px;
+        margin: 15px 0 13px 6px;
+        font-size: 13px;
+        color: #9B9B9B;
+        line-height: 1;
+    }
+
+    main .courses ul .course .name {
+        font-size: 18px;
+        color: #2A2A2A;
+        line-height: 25px;
+    }
+
+    main .courses ul .course .time {
+        margin-top: 10px;
+    }
+
+    main .courses ul .course .address {
+        margin-top: 12px;
+    }
+
+    main .courses ul .course .quota {
+        margin-top: 12px;
+    }
+
+    main .courses ul .course .period {
+        position: absolute;
+        right: 0;
+        bottom: 13px;
+        margin-top: 12px;
+    }
+
+    main .courses ul .course .period img {
+        width: 44px;
     }
 </style>
