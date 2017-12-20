@@ -1,13 +1,5 @@
 <template>
-    <div id="app">
-        <header class="navBar">
-            <a href="/"><h1>OA学院</h1></a>
-            <nav>
-                <img class="user" src="./assets/img/user.png" alt="">
-            </nav>
-        </header>
-        <router-view/>
-    </div>
+    <router-view/>
 </template>
 
 <script>
