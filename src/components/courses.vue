@@ -1,25 +1,25 @@
 <template>
     <main>
-        <img @click="getCourses" class="banner" src="../assets/img/banner.png" alt="">
+        <img class="banner" src="../assets/img/banner.png" alt="">
         <section class="courses">
             <header class="tabs">
                 <div class="tabs-list">
-                    <a class="on" href="events/week-music">
+                    <a @click="filter(0)" :class="{on: type === 0}">
                         <span>全部</span>
                     </a>
-                    <a href="events/week-1001" data-i="0">
+                    <a @click="filter(1)">
                         <span>报名中</span>
                     </a>
-                    <a href="events/week-1002" data-i="1">
+                    <a @click="filter(2)">
                         <span>哲学</span>
                     </a>
-                    <a href="events/week-1003" data-i="2">
+                    <a @click="filter(3)">
                         <span>艺术</span>
                     </a>
-                    <a href="events/week-1004" data-i="3">
+                    <a @click="filter(4)">
                         <span>历史</span>
                     </a>
-                    <a href="events/week-music">其他</a>
+                    <a @click="filter(5)">其他</a>
                 </div>
             </header>
             <ul class="app" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
@@ -40,7 +40,12 @@ export default {
   data () {
     return {
       busy: false,
-      courses: []
+      courses: [],
+      baseURL: '/courses',
+      filterURL: '/courses',
+      URL: '/courses',
+      page: 0,
+      type: 0
     }
   },
   components: {
@@ -52,34 +57,53 @@ export default {
       me.busy = true
       console.log('loading... ' + new Date())
       setTimeout(function () {
+        // me.URL = URL.addPara(me.filterURL, {page: ++me.page})
         axios
-          .get('/courses')
+          .get(me.URL)
           .then(function (response) {
             console.log(response)
             me.courses = me.courses.concat(response.data.data.courses)
+            console.log('end... ' + new Date())
+            me.busy = false
           })
           .catch(function (error) {
             console.log(error)
           })
-        console.log('end... ' + new Date())
-        me.busy = false
       }, 1000)
     },
     getCourses () {
       let me = this
+      me.URL = me.filterURL
       axios
-        .get('/courses')
+        .get(me.URL)
         .then(function (response) {
           console.log(response)
-          me.courses = response.data.data.courses
+          me.courses = me.courses.concat(response.data.data.courses)
         })
         .catch(function (error) {
           console.log(error)
         })
+    },
+    filter (type) {
+      let me = this
+      me.type = type
+      if (type === 0) {
+        me.filterURL = me.baseUrl
+      } else if (type === 1) {
+        me.filterURL = me.baseUrl + '?period=1'
+      } else {
+        me.filterURL = me.baseUrl + '?type=' + --type
+      }
+
+      me.page = 0
+      me.courses = []
+      me.getCourses()
     }
   },
   created: function () {
-    this.getCourses()
+    let me = this
+
+    me.getCourses()
   }
 }
 </script>
