@@ -1,5 +1,8 @@
 <template>
-    <router-view/>
+    <div id="app">
+        <router-view/>
+    </div>
+   
 </template>
 
 <script>
@@ -10,6 +13,9 @@
 </script>
 
 <style lang="less">
+    body {
+        background: #F4F4F4;
+    }
     #app {
         font-family: PingFangSC-Regular, 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;

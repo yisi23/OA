@@ -6,6 +6,9 @@ import router from './router'
 import infiniteScroll from 'vue-infinite-scroll'
 import moment from 'moment/moment'
 import 'normalize.css'
+import Mint from 'mint-ui'
+import 'mint-ui/lib/style.css'
+Vue.use(Mint)
 
 Vue.use(infiniteScroll)
 Vue.filter('datetime', function (value, formatString) {
