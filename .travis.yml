@@ -43,8 +43,3 @@ after_success:
 env:
   global:
     - GH_REF: github.com/temberature/OA.git
-
-作者：runner_yue
-链接：https://juejin.im/post/596e390a6fb9a06bbf701abf
-来源：掘金
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
