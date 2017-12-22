@@ -28,7 +28,7 @@ before_script:
   - git clone --branch gh-pages https://${GH_REF} dist
 
 script:
-  - npm test
+  # - npm test
 
 after_success:
   - npm run build
