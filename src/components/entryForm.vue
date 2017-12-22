@@ -1,6 +1,15 @@
 <template>
     <div class="entryForm">
-        <div class="info">
+        <div v-show="enrolled" class="tip">
+          <img src="../assets/course/entryForm/img/enroll_success.png" alt="">
+          <div>报名申请成功</div>
+          <router-link to="/courses">
+            <mt-button type="default" class="enrollBtn">我知道了</mt-button>
+          </router-link>
+          
+        </div>
+        <div v-show="!enrolled" class="body">
+          <div class="info">
             <mt-field label="姓名" placeholder="" v-model="name"></mt-field>
             <mt-cell @click.native="sexSheetVisible=true" title="性别" v-model="sex" is-link></mt-cell>
             <mt-cell @click.native="openPicker" title="出生年月" v-model="birthdate" is-link></mt-cell>
@@ -18,6 +27,8 @@
         </mt-actionsheet>
         <div is="mt-datetime-picker" ref="picker" v-model="datePickerValue" type="date" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleDateConfirm">
         </div>
+        </div>
+        
     </div>
 </template>
 
@@ -37,7 +48,9 @@ export default {
       sexSheetVisible: false,
       sexSheetActions: [],
       datePickerValue: new Date(),
-      URL: ''
+      URL: '',
+      tipShow: false,
+      enrolled: false
     }
   },
   methods: {
@@ -46,6 +59,7 @@ export default {
       axios.post(me.URL)
       .then((response) => {
         console.log(response.data.retdesc)
+        this.enrolled = true
       })
     },
     openPicker () {
@@ -76,11 +90,25 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+a {
+  text-decoration: none;
+}
 .entryForm {
   position: relative;
   font-size: 26/2px;
   color: #ABABAB;
   background: #F4F4F4;
+  .tip {
+    width: 100%;
+    padding: 180/2px 0 200/2px 0;
+    font-size: 38/2px;
+    color: #494949;
+    text-align: center;
+    img {
+      margin-bottom: 43/2px;
+      width: 299/2px;
+    }
+  }
   .info {
     font-size: 32/2px;
     color: #494949;

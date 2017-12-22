@@ -39,7 +39,10 @@
         {{course.detail}}
       </div>
     </div>
-    <div @click="enroll()" class="enrollBtn">立即报名</div>
+    <router-link :to="{path: './entryForm'}" append>
+      <div class="enrollBtn">立即报名</div>
+    </router-link>
+    
   </div>
 
 </template>

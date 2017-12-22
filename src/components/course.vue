@@ -1,5 +1,6 @@
 <template>
-  <li @click="gotoDetail(course.id)" class="course">
+  <router-link :to="{name: 'course', params: {id: course.id}}">
+    <li class="course">
     <img class="cover" :src="course.cover" alt="">
     <div class="info">
       <div class="name">
@@ -24,6 +25,8 @@
       </div>
     </div>
   </li>
+  </router-link>
+
 
 </template>
 
@@ -60,6 +63,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+a {
+  text-decoration: none;
+}
 .course {
   position: relative;
   display: flex;
