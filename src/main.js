@@ -3,14 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import infiniteScroll from 'vue-infinite-scroll'
 import moment from 'moment/moment'
 import 'normalize.css'
 import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 Vue.use(Mint)
 
-Vue.use(infiniteScroll)
 Vue.filter('datetime', function (value, formatString) {
   formatString = formatString || 'YYYY-MM-DD HH:mm:ss'
   // return moment(value).format(formatString) // value可以是普通日期 20170723

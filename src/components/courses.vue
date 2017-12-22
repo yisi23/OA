@@ -33,9 +33,11 @@
                         </a>
                     </div>
                 </header>
-                <ul class="app" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+                
+                <ul class="app" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
                     <li is="Course" v-for="course in courses" v-bind:course="course" v-bind:key="course.id"></li>
                 </ul>
+                <mt-spinner v-if="loading" type="snake"></mt-spinner>
             </section>
 
         </main>
@@ -57,7 +59,8 @@ export default {
       filterURL: '/courses',
       URL: '/courses',
       page: 0,
-      type: 0
+      type: 0,
+      loading: false
     }
   },
   components: {
@@ -66,7 +69,7 @@ export default {
   methods: {
     loadMore: function () {
       var me = this
-      me.busy = true
+      me.loading = true
       console.log('loading... ' + new Date())
       setTimeout(function () {
         me.URL = URL.addPara(me.filterURL, { page: ++me.page })
@@ -76,7 +79,7 @@ export default {
             console.log(response)
             me.courses = me.courses.concat(response.data.data.courses)
             console.log('end... ' + new Date())
-            me.busy = false
+            me.loading = false
           })
           .catch(function (error) {
             console.log(error)
@@ -86,10 +89,12 @@ export default {
     getCourses () {
       let me = this
       me.URL = me.filterURL
+      me.loading = true
       axios
         .get(me.URL)
         .then(function (response) {
           console.log(response)
+          me.loading = false
           me.courses = me.courses.concat(response.data.data.courses)
         })
         .catch(function (error) {
@@ -145,7 +150,9 @@ export default {
     }
   }
 }
-
+.courses /deep/ .mint-spinner-snake {
+  margin: 10px auto;
+}
 .courses ul {
   margin: 0;
   padding-left: 0;

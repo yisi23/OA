@@ -1,5 +1,5 @@
 <template>
-  <div class="course">
+  <div v-if="course.id" class="course">
     <div class="coverContainer">
       <div :style="{'background-image': 'url(' + course.cover + ')'}" class="blurCover"></div>
       <img class="cover" :src="course.cover" alt="">
@@ -49,6 +49,7 @@
 
 <script>
 import axios from '../utils/customAxios'
+import { Indicator } from 'mint-ui'
 
 export default {
   name: 'course',
@@ -59,11 +60,13 @@ export default {
     }
   },
   methods: {
-    getCourse () {
+    fetchData () {
       let me = this
+      Indicator.open()
       axios
         .get(me.URL)
         .then(function (response) {
+          Indicator.close()
           console.log(response)
           me.course = response.data.data
         })
@@ -82,7 +85,7 @@ export default {
   created: function () {
     let me = this
     me.URL = '/course/' + this.$route.params.id
-    me.getCourse()
+    me.fetchData()
   }
 }
 </script>
